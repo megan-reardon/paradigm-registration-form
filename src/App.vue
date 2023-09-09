@@ -1,11 +1,11 @@
 <template>
   <v-app>
     <v-main>
-      <HelloWorld />
+      <RegistrationForm />
     </v-main>
   </v-app>
 </template>
 
 <script setup>
-  import HelloWorld from '@/components/HelloWorld.vue'
+import RegistrationForm from "./components/RegistrationForm.vue";
 </script>
