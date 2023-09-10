@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" lazy-validation>
+  <v-form ref="form" lazy-validation @submit.prevent>
     <v-container>
       <v-col cols="12" md="4" pad>
         <v-text-field
@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import { writeUserData, getUserData, encryptPassword } from "../firebase/init";
+
 export default {
   data: () => ({
     valid: false,
@@ -50,18 +52,25 @@ export default {
     ],
   }),
   methods: {
-    submitForm() {
+    async submitForm() {
       this.$refs.form.validate();
+      const data = await getUserData(this.email);
+      if (data) {
+        console.log("Email already exists");
+        return;
+      }
+      writeUserData(this.email, encryptPassword(this.password));
+      console.log("submitted");
     },
   },
   computed: {
     confirmedPasswordRules() {
       return [
-        () => (this.password === this.confirmedPassword) || 'Password must match',
-        v => !!v || 'Confirmation Password is required'
+        () => this.password === this.confirmedPassword || "Password must match",
+        (v) => !!v || "Confirmation Password is required",
       ];
     },
-}
+  },
 };
 </script>
 
