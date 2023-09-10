@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" lazy-validation @submit.prevent>
+  <v-form ref="form" @submit.prevent>
     <v-container>
       <v-col cols="12" md="4" pad>
         <v-text-field
@@ -8,7 +8,6 @@
           label="Email Address"
           required
         ></v-text-field>
-
         <v-text-field
           v-model="password"
           :rules="passwordRules"
@@ -25,6 +24,9 @@
         <v-btn type="submit" block class="mt-2" @click="submitForm"
           >Submit
         </v-btn>
+        <div>
+          {{ errorMessage }}
+        </div>
       </v-col>
     </v-container>
   </v-form>
@@ -35,12 +37,11 @@ import { writeUserData, getUserData, encryptPassword } from "../firebase/init";
 
 export default {
   data: () => ({
-    valid: false,
     password: "",
+    errorMessage: "",
     confirmedPassword: "",
     passwordRules: [
-      (v) =>
-        (v && v.length >= 6) || "Password must be at least than 6 characters",
+      (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
     ],
     email: "",
     emailRules: [
@@ -48,19 +49,38 @@ export default {
       (v) =>
         /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
           v
-        ) || "E-mail must be valid",
+        ) || "Email must be valid",
     ],
   }),
   methods: {
     async submitForm() {
-      this.$refs.form.validate();
-      const data = await getUserData(this.email);
-      if (data) {
-        console.log("Email already exists");
-        return;
+      try {
+        const { valid } = await this.$refs.form.validate();
+        if (valid) {
+          const data = await getUserData(this.email);
+          if (data) {
+            this.errorMessage = "Email already exists";
+            return;
+          } else {
+            writeUserData(this.email, encryptPassword(this.password));
+            this.errorMessage = `Submitted email: ${this.email} successfully`;
+            this.resetForm();
+          }
+        } else {
+          this.errorMessage = "Please fix the above fields";
+        }
+      } catch (error) {
+        console.error(error);
+        this.errorMessage =
+          "An error occurred when trying to submit. Please try again.";
       }
-      writeUserData(this.email, encryptPassword(this.password));
-      console.log("submitted");
+    },
+    async resetForm() {
+      await this.$refs.form.reset();
+
+      setTimeout(() => {
+        this.errorMessage = "";
+      }, 6000);
     },
   },
   computed: {

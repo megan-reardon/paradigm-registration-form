@@ -24,11 +24,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-export const writeUserData = (email, password) => {
+export const writeUserData = async (email, password) => {
   const reference = ref(db, "users/");
-  push(reference, {
+  return await push(reference, {
     email,
     password,
+  }).catch((error) => {
+    throw new Error(`Something went wrong when writing data: ${error}`);
   });
 };
 
@@ -38,21 +40,8 @@ export const getUserData = async (email) => {
     ...[orderByChild("email"), equalTo(email)]
   );
   const snapshot = await get(usersRef);
-  // data is a promise, this needs to be awaited?
   const data = await snapshot.val();
-  console.log(data);
   return data;
-
-  // reference
-  //   .child("users")
-  //   .orderByChild("email")
-  //   .equalTo(email)
-  //   .on("value", function (snapshot) {
-  //     console.log(snapshot.val());
-  //     snapshot.forEach(function (data) {
-  //       console.log(data.key);
-  //     });
-  //   });
 };
 
 export const encryptPassword = (password) => {
