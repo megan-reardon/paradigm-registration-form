@@ -1,44 +1,18 @@
-# default
+### Paradigm Press Registration Form
 
-## Project setup
+#### Abstract
+This is a simple registration form for a user to enter their email and password into an input form. There is form validation that requires a valid email address, checks the password is at least 6 characters, and confirms the password is entered a second time. The entered email address is also checked against the database to ensure it is a unique email that does not already exist.
 
-```
-# yarn
-yarn
+### Deployed App
 
-# npm
-npm install
+#### Technologies Used
+Development: Vue.js, Firebase Realtime Database
 
-# pnpm
-pnpm install
-```
+#### Project Next Steps
 
-### Compiles and hot-reloads for development
 
-```
-# yarn
-yarn dev
+#### Setup
+Fork and clone down this repo.
+Once you have cloned the repo, change into the directory.
+To view the application, run npm run dev and open the provided localhost url in the browser.
 
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-```
-
-### Compiles and minifies for production
-
-```
-# yarn
-yarn build
-
-# npm
-npm run build
-
-# pnpm
-pnpm build
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).
