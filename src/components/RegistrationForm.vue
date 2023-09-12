@@ -1,5 +1,5 @@
 <template>
-  <v-img height="100" src="@/assets/Paradigm_logo.png" />
+  <v-img height="100" src="/public/assets/Paradigm_Logo.png" />
   <v-form ref="form" @submit.prevent>
     <v-container class="d-flex justify-center">
       <v-col cols="10" md="4">
