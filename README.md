@@ -5,11 +5,15 @@ This is a simple registration form for a user to enter their email and password 
 
 ### Deployed App
 
+[Registration Form](https://paradigm-registration-form.web.app/)
+
 #### Technologies Used
 Development: Vue.js, Firebase Realtime Database
 
 #### Project Next Steps
-
++ Convert project to Typescript
++ Add additional error handling with regards to the database
++ Add unit tests 
 
 #### Setup
 Fork and clone down this repo.
